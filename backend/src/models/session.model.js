@@ -1,4 +1,5 @@
-import mongoose, {Schema} from "mongoose";
+import {Schema} from "mongoose";
+import { sessionDB } from "../config/database.js";
 
 const sessionSchema = new Schema(
     {
@@ -41,4 +42,4 @@ const sessionSchema = new Schema(
     }
 )  
 
-export const Session = mongoose.model("Session", sessionSchema)
+export const Session = sessionDB.model("Session", sessionSchema);

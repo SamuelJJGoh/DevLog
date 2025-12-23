@@ -1,4 +1,5 @@
-import mongoose, {Schema} from "mongoose"
+import {Schema} from "mongoose";
+import { resourceDB } from "../config/database.js";
 
 const resourceSchema = new Schema (
     {
@@ -36,4 +37,4 @@ const resourceSchema = new Schema (
     }
 )
 
-export const Resource = mongoose.model("Resource", resourceSchema)
+export const Resource = resourceDB.model("Resource", resourceSchema);

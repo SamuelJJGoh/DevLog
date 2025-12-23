@@ -1,5 +1,3 @@
-import connectDB from './config/database.js';
-import app from './app.js';
 import dotenv from 'dotenv'
 
 dotenv.config({
@@ -8,7 +6,11 @@ dotenv.config({
 
 const startServer = async () => {
     try {
-        await connectDB();
+        const { default: app } = await import("./app.js");
+        const { sessionDB, resourceDB } = await import("./config/database.js");
+
+        await sessionDB.asPromise();
+        await resourceDB.asPromise();
 
         app.on("error", (error) => {
             console.log("ERROR", error);
