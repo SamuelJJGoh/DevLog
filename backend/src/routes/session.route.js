@@ -3,10 +3,14 @@ import { createSession, getSessions, getSession, updateSession, deleteSession } 
 
 const router = Router();
 
-router.route("/createSession").post(createSession)
-router.route("/getSessions").get(getSessions)
-router.route("/getSession/:id").get(getSession)
-router.route("/updateSession/:id").patch(updateSession)
-router.route("/deleteSession/:id").delete(deleteSession)
+router
+    .route("/")
+    .post(createSession)
+    .get(getSessions)
+router
+    .route("/:id")
+    .get(getSession)
+    .patch(updateSession)
+    .delete(deleteSession)
 
 export default router;

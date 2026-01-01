@@ -3,10 +3,14 @@ import { createResource, getResources, getResource, updateResource, deleteResour
 
 const router = Router();
 
-router.route("/createResource").post(createResource)
-router.route("/getResources").get(getResources)
-router.route("/getResource/:id").get(getResource)
-router.route("/updateResource/:id").patch(updateResource)
-router.route("/deleteResource/:id").delete(deleteResource)
+router
+    .route("/")
+    .post(createResource)
+    .get(getResources)
+router
+    .route("/:id")
+    .get(getResource)
+    .patch(updateResource)
+    .delete(deleteResource)
 
 export default router;
