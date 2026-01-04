@@ -9,6 +9,15 @@
         --background: 222 47% 6%;
         --foreground: 210 40% 98%;
 
+        --primary: 174 72% 56%;
+        --primary-foreground: 222 47% 6%;
+
+        --secondary: 222 47% 14%;
+        --secondary-foreground: 210 40% 98%;
+
+        --muted: 222 30% 18%;
+        --muted-foreground: 215 20% 55%;
+
         --border: 222 30% 18%;
     }
 
@@ -23,6 +32,17 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'JetBrains Mono', monospace;;
+        font-family: 'JetBrains Mono', monospace;
     }
+}
+
+@layer components {
+    .nav-link {
+    @apply px-4 py-2 rounded-lg text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-secondary;
+  }
+
+  .nav-link-active {
+    @apply text-primary bg-primary/10 border border-primary/20;
+  }
+
 }
