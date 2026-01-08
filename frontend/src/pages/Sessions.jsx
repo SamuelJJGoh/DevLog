@@ -61,6 +61,24 @@ export default function Sessions() {
         }
     }
 
+    const handleDeleteSession = async (deletedSession) => {
+        try {
+            if (!deletedSession || !deletedSession._id) {
+                console.error("Invalid session data for deletion.");
+                return;
+            }
+            await axios.delete(
+                `${API_BASE_URL}/v1/sessions/${deletedSession._id}`
+            );
+
+            setSessions((prevSessions) => 
+                prevSessions.filter((session) => session._id !== deletedSession._id)
+            );
+        } catch (error) {
+            console.error("Error deleting session:", error);
+        }
+    }
+
     return (
         <Layout>
             <div className="mx-auto max-w-7xl px-6 py-8">
@@ -81,7 +99,7 @@ export default function Sessions() {
                 <p className="text-muted-foreground text-sm">{`Showing ${sessions.length} of ${sessions.length} sessions`}</p>
 
                 <div>
-                    <SessionList sessions={sessions} loading={loading} />
+                    <SessionList sessions={sessions} loading={loading} onDelete={handleDeleteSession}/>
                 </div>
             </div>
 

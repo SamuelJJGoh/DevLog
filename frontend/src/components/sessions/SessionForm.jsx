@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 const sessionTypes = [
     "Project",
@@ -93,7 +93,7 @@ export const SessionForm = ({ onClose, onCreate }) => {
                 </div>
                 
                 {/* Form */}
-                <form className="mt-6 space-y-4">
+                <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                     <div className="grid gap-4 md:grid-cols-2">
                         <label className="flex flex-col gap-2 text-sm font-medium">
                             Title
@@ -104,6 +104,7 @@ export const SessionForm = ({ onClose, onCreate }) => {
                                 value={formValues.title}
                                 onChange={handleChange}
                                 placeholder="API refactor"
+                                required
                             />
                         </label>
 
@@ -150,7 +151,7 @@ export const SessionForm = ({ onClose, onCreate }) => {
                                         </option>
                                     ))}
                                 </select>
-                                <ArrowDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
+                                <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
                             </div>
                         </label>
                     </div>
@@ -193,10 +194,9 @@ export const SessionForm = ({ onClose, onCreate }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            onClick={handleSubmit}
                             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                         >
-                            Save Session
+                            Create Session
                         </button>
                     </div>
                 </form>
