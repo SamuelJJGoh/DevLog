@@ -1,5 +1,5 @@
 import { Layout } from "../components/layout/layout.jsx";
-import { Plus } from "lucide-react";
+import { Plus, Search, Funnel, ArrowUpNarrowWide, ArrowDownWideNarrow, ChevronDown } from "lucide-react";
 import { SessionList } from "../components/sessions/SessionList.jsx";
 import { SessionForm } from "../components/sessions/SessionForm.jsx";
 import { useState, useEffect, useCallback } from "react";
@@ -13,6 +13,21 @@ export default function Sessions() {
 
     const [showForm, setShowForm] = useState(false);
     const [editingSession, setEditingSession] = useState(null);
+
+    const sessionTypes = [
+        "All",
+        "Project",
+        "Tutorial",
+        "Interview Prep",
+        "DSA",
+        "Work",
+        "Research",
+        "System Design"
+    ];
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedType, setSelectedType] = useState("All");
+    const [sortOrder, setSortOrder] = useState("desc"); 
     
     const fetchSessions = useCallback(async () => {     
         setLoading(true);   
@@ -123,6 +138,26 @@ export default function Sessions() {
         }
     };
 
+    const filteredSessions = sessions.filter((session) => {
+        if (searchQuery && !session.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+            return false;
+        }
+        if (selectedType !== "All" && session.type !== selectedType) {
+            return false;
+        }
+        return true;
+    });
+
+    const toggleSortOrder = () => {
+        setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    };
+
+    filteredSessions.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
     return (
         <Layout>
             <div className="mx-auto max-w-7xl px-6 py-8">
@@ -139,8 +174,58 @@ export default function Sessions() {
                         <span>New Session</span>
                     </button>
                 </div>
+
+                <div className="glass-card p-4 mb-6">
+                    <div className="flex flex-col lg:flex-row gap-4">
+                        {/* Search Bar */}
+                        <div className="relative flex-1">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <input 
+                                type="text"
+                                className="rounded-lg border border-border/70 bg-secondary/60 text-sm w-full pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                placeholder="Search sessions..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Session types dropdown */}
+                        <div className="flex items-center relative styled-select group">
+                            <Funnel className="absolute left-3 h-4 w-4 text-muted-foreground"/>
+                            <select
+                                className="rounded-lg border border-border/70 bg-secondary/60 text-sm px-10 py-3 focus:outline-none hover:outline-none hover:ring-2 hover:ring-primary/50 text-muted-foreground"
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value)}
+                            >
+                                {sessionTypes.map((type) => (
+                                    <option 
+                                        key={type} value={type}
+                                    >
+                                        Type: {type}
+                                    </option>
+                                ))}
+                            </select>
+                            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 group-hover:text-primary text-muted-foreground"/>
+                        </div>
+
+                        {/* Sort by date */}
+                        <div className="flex items-center rounded-lg hover:ring-2 hover:ring-primary/50 hover:outline-none"> 
+                            <button 
+                                className="relative rounded-lg pl-10 px-5 py-3 border border-border/70 bg-secondary/60 text-muted-foreground text-sm"
+                                onClick={toggleSortOrder}
+                            >
+                                {sortOrder === "asc" ? (
+                                    <ArrowUpNarrowWide className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
+                                    ) : (   
+                                    <ArrowDownWideNarrow className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
+                                )}
+                                Sort by Date
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
-                <p className="text-muted-foreground text-sm">{`Showing ${sessions.length} of ${sessions.length} sessions`}</p>
+                <p className="text-muted-foreground text-sm">{`Showing ${filteredSessions.length} of ${sessions.length} sessions`}</p>
 
                 <div>
                     <SessionList
@@ -148,8 +233,21 @@ export default function Sessions() {
                         loading={loading}
                         onDelete={handleDeleteSession}
                         onEdit={handleEditSession}
+                        filteredSessions={filteredSessions}
                     />
                 </div>
+
+                {filteredSessions.length === 0 && sessions.length !== 0 && (
+                    <div className="glass-card p-12 text-center">
+                        <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                        <Search className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="font-mono text-lg font-semibold">No sessions found</h3>
+                        <p className="mt-2 text-muted-foreground">
+                        Try adjusting your filters or search query
+                        </p>
+                    </div>
+                )}
             </div>
 
             {showForm && (

@@ -41,14 +41,14 @@ const typeStyles = {
     "System Design": "bg-type-systemDesign/10 text-type-systemDesign border-type-systemDesign/30",
 };
 
-export const SessionList = ({ sessions = [], loading = false, onDelete, onEdit }) => {
+export const SessionList = ({ sessions = [], loading = false, onDelete, onEdit, filteredSessions = []}) => {
     return (
         <div className="mt-4">
             {loading ? (
                 <div>Loading sessions...</div>
             ) : sessions.length > 0 ? (
                 <div className="space-y-4">
-                    {sessions.map((session) => {
+                    {filteredSessions.map((session) => {
                         const key = session._id;
                         return (
                             <div 
