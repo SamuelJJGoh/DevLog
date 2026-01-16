@@ -83,6 +83,25 @@ export default function Resources() {
         }
     }
 
+    const handleDeleteResource = async (deletedResource) => {
+        try {
+            if (!deletedResource || !deletedResource._id) {
+                console.error("Invalid resource data for deletion.")
+                return;
+            }
+
+            await axios.delete(
+                `${API_BASE_URL}/v1/resources/${deletedResource._id}`
+            );
+
+            setResources((prevResources) => 
+                prevResources.filter((resource) => resource._id !== deletedResource._id)
+            );
+        } catch (error) {
+            console.error("Error deleting resource:"), error
+        }
+    }
+
     const filteredResources = resources.filter((resource) => {
         const query = searchQuery.toLowerCase();
 
@@ -198,6 +217,7 @@ export default function Resources() {
                     <ResourceList 
                         resources={resources} 
                         loading={loading}
+                        onDelete={handleDeleteResource}
                         filteredResources={filteredResources}/>
                 </div>
 

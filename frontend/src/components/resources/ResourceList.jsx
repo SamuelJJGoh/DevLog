@@ -14,7 +14,7 @@ const statusStyles = {
   "Completed": "bg-status-completed/10 text-status-completed border-status-completed/30",
 };
 
-export const ResourceList = ({ resources = [], loading = false, filteredResources = [] }) => {
+export const ResourceList = ({ resources = [], loading = false, onDelete, filteredResources = [] }) => {
     return (
         <div className="mt-4">
             {loading ? (
@@ -35,10 +35,13 @@ export const ResourceList = ({ resources = [], loading = false, filteredResource
                                     </div>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button className="icon-button hover:text-accent hover:bg-accent/10">
-                                        <SquarePen className="h-5 w-5" />
+                                            <SquarePen className="h-5 w-5" />
                                         </button>
-                                        <button className="icon-button hover:text-destructive hover:bg-destructive/10">
-                                        <Trash2 className="h-5 w-5" />
+                                        <button 
+                                            className="icon-button hover:text-destructive hover:bg-destructive/10"
+                                            onClick={() => onDelete && onDelete(resource)}
+                                        >
+                                            <Trash2 className="h-5 w-5" />
                                         </button>
                                     </div>
                                 </div>
