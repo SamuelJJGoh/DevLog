@@ -5,7 +5,7 @@ const createSession = async (req, res) => {
     try {
         const { title, date, durationMinutes, type, techStack, notes} = req.body
 
-        if (!title || !date || !durationMinutes || !type || !notes){
+        if (!title || !date || !durationMinutes || !type){
             return res.status(400).json({
                 message: "All fields are required!"
             })

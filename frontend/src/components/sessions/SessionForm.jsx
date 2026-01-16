@@ -220,7 +220,6 @@ export const SessionForm = ({ onClose, onCreate, initialValues, onUpdate }) => {
                             value={formValues.notes}
                             onChange={handleChange}
                             placeholder="What did you learn? Challenges faced? Outcomes?"
-                            required
                             maxLength={1000}
                         />
                     </label>

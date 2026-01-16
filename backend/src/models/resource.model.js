@@ -43,9 +43,7 @@ const resourceSchema = new Schema (
         },
         notes: {            // "description of the resource, "why the resource is useful"
             type: String,
-            required: true,
             trim: true,
-            minlength: 1,
             maxlength: 1000
         },
     },

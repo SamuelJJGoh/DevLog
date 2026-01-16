@@ -39,9 +39,7 @@ const sessionSchema = new Schema(
         }, 
         notes: {            // "Lessons learned", "Challenges", "Outcomes"
             type: String,
-            required: true,
             trim: true,
-            minlength: 1,
             maxlength: 1000
         }
     }, 

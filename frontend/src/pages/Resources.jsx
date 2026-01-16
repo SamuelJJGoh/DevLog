@@ -51,6 +51,38 @@ export default function Resources() {
         fetchResources();
     }, [fetchResources])
 
+    const handleCreateResource = async (newResource) => {
+        try {
+            const response = await axios.post(
+                `${API_BASE_URL}/v1/resources`,
+                newResource,
+                {
+                    headers:{
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            const createdResource = response.data.resource
+
+            if (createdResource && typeof createdResource === "object") {
+                setResources((prevResources) => [createdResource, ...prevResources])
+            } else {
+                await fetchResources()
+            }
+
+            return createdResource;
+
+        } catch (error) {
+            let message = "Error creating resource" 
+            if (error.response && error.response.data && error.response.data.error) {
+                message += ` ${error.response.data.error}`;
+            }
+            console.error(message);
+            return null;
+        }
+    }
+
     const filteredResources = resources.filter((resource) => {
         const query = searchQuery.toLowerCase();
 
@@ -184,7 +216,9 @@ export default function Resources() {
 
             {showForm && (
                 <ResourceForm 
-                    onClose={() => setShowForm(false)} />
+                    onClose={() => setShowForm(false)} 
+                    onCreate={handleCreateResource}
+                />
             )}
         </Layout>
     );

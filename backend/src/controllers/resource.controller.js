@@ -4,7 +4,7 @@ const createResource = async (req, res) => {
     try {
         const { title, category, topics, status, url, notes } = req.body
 
-        if (!title || !category || !topics ||!status || !notes) {
+        if (!title || !category || !topics ||!status) {
             return res.status(400).json({
                 message: "All fields are required!"
             })

@@ -15,14 +15,14 @@ const statusTypes = [
     "Completed"
 ];
 
-export const ResourceForm = ({ onClose }) => {
+export const ResourceForm = ({ onClose, onCreate }) => {
     const [formValues, setFormValues] = useState({
         title: '',
         category: "Video",
         topics: '',
         status: "To watch",
-        notes: '',
-        url: ''
+        url: '',
+        notes: ''
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);    
@@ -37,7 +37,41 @@ export const ResourceForm = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);  
+
+        const payload = {
+            ...formValues,
+            topics: formValues.topics
+                    .split(",")
+                    .map((topic) => topic.trim())
+                    .filter(Boolean)
+        }
+
+        try {
+            setIsSubmitting(true);  
+
+            let result;
+            if (onCreate) {
+                result = await onCreate(payload);
+            } else {
+                result = null;
+            }
+
+            if (result) {
+                setFormValues({
+                    title: '',
+                    category: "Video",
+                    topics: '',
+                    status: "To watch",
+                    url: '',
+                    notes: ''
+                });
+                onClose();
+            }
+        } catch (error) {
+            console.error("Error creating session:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -67,7 +101,7 @@ export const ResourceForm = ({ onClose }) => {
                                 name="title"
                                 value={formValues.title}
                                 onChange={handleChange}
-                                placeholder="MongoDB Aggregation Basics"
+                                placeholder="Introduction to Backend"
                                 required
                             />
                         </label>
@@ -95,14 +129,14 @@ export const ResourceForm = ({ onClose }) => {
 
                     <div className="grid gap-4 md:grid-cols-2">
                         <label className="flex flex-col gap-2 text-sm font-medium">
-                            Topics
+                            Topic(s)
                             <input 
                                 className="rounded-lg border border-border/70 bg-input/60 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
                                 type="text"
                                 name="topics"
                                 value={formValues.topics}
                                 onChange={handleChange}
-                                placeholder="MongoDB"
+                                placeholder="Node.js, Express, MongoDB"
                                 required
                             />
                         </label>
@@ -137,7 +171,7 @@ export const ResourceForm = ({ onClose }) => {
                                 name="url"
                                 value={formValues.url}
                                 onChange={handleChange}
-                                placeholder="https://www.youtube.com"
+                                placeholder="https://www.youtube.com/watch?v=KOutPbKc9UM"
                             />
                         </label>
                     </div>
@@ -152,30 +186,28 @@ export const ResourceForm = ({ onClose }) => {
                                 value={formValues.notes}
                                 onChange={handleChange}
                                 placeholder="Add notes about the resource, such as a short description and why it's useful."
-                                required
+                                maxLength={1000}
                             />
                         </label>
+
+                        <div className="flex flex-wrap mt-2 justify-end gap-3">
+                            <button 
+                                type="button"
+                                className="rounded-lg border border-border/70 px-4 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
+                                onClick={onClose}>
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90"
+                                disabled={isSubmitting}
+                                >
+                                Create Resource
+                            </button>
+                        </div>
                     </div>
                 </form>
-                
-                <div className="flex flex-wrap mt-2 justify-end gap-3">
-                    <button 
-                        type="button"
-                        className="rounded-lg border border-border/70 px-4 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
-                        onClick={onClose}>
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90"
-                        disabled={isSubmitting}
-                        >
-                        Create Resource
-                    </button>
-                </div>
             </div>
-
-        
         </div>
     );
 } 
