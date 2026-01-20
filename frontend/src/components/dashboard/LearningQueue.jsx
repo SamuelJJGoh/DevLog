@@ -1,4 +1,4 @@
-import { Video, FileText, BookOpen, Code2, GraduationCap, ScrollText, ArrowRight, ExternalLink } from 'lucide-react';
+import { Video, FileText, BookOpen, Code2, GraduationCap, ScrollText, ArrowRight } from 'lucide-react';
 import { Link } from "react-router-dom";
 
 const categoryIcons = {

@@ -100,7 +100,7 @@ export default function Resources() {
                 prevResources.filter((resource) => resource._id !== deletedResource._id)
             );
         } catch (error) {
-            console.error("Error deleting resource:"), error
+            console.error("Error deleting resource:", error)
         }
     }
 
