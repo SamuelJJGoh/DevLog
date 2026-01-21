@@ -86,7 +86,6 @@ export default function Dashboard() {
             resource.status === "To watch" || resource.status === "In progress") 
     , [resources])
     
-
     const resourcesToReviewCount = resourcesToReview.length
 
     const streakCount = useMemo(() => {
